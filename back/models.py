@@ -29,7 +29,7 @@ class Product(models.Model):
 class Kit(models.Model): 
     name = models.CharField(max_length=100)
     price = models.IntegerField()
-    stock_kit = models.ForeignKey('Stock', on_delete=models.CASCADE, default="",null=True, blank=True)
+    stock_kit = models.IntegerField()
     image = models.ImageField(upload_to='shop/images', default="", null= True, blank=True )
     desc = models.CharField(max_length=300)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default="")
