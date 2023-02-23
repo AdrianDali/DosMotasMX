@@ -27,6 +27,7 @@ class CategoryView(APIView):
     def post(self,request): 
         for key in request.data:
             print(key)
+            #probar aqui que no hay problema con el request.data 
             print(request.data.get(key))
             print(request.data.get('category')[1])
         serializer = CategorySerializer(data =request.data.get('category')[1])
