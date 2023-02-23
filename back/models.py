@@ -16,7 +16,7 @@ class User(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
-    stock = models.IntegerField()
+    stock_product = models.ForeignKey('Stock', on_delete=models.CASCADE, default="")
     image = models.ImageField(upload_to='shop/images', default="", null=True, blank=True)
     desc = models.CharField(max_length=300)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default="")
@@ -24,12 +24,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-
+    
 #LOS KITS QUE ESTARAN REGISTRADI A PARTRIR DE LOS PRODUCTOS 
 class Kit(models.Model): 
     name = models.CharField(max_length=100)
     price = models.IntegerField()
-    stock = models.IntegerField()
+    stock_kit = models.ForeignKey('Stock', on_delete=models.CASCADE, default="",null=True, blank=True)
     image = models.ImageField(upload_to='shop/images', default="", null= True, blank=True )
     desc = models.CharField(max_length=300)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default="")
@@ -38,8 +38,16 @@ class Kit(models.Model):
     def __str__(self):
         return self.name
     
+    
+class Stock(models.Model):
+    name_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    kit_select = models.ForeignKey(Kit, on_delete=models.CASCADE, null=True, blank=True)
+    stock = models.IntegerField()
+    comment = models.CharField(max_length=300, null=True, blank=True)
+
+
 #RELACION MUCHOS A MNUCHOS PARA CREAR EL KIT BASADO EN LOS PRODUCTOS 
-class ProcuctKit(models.Model):
+class ProductKit(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     kit = models.ForeignKey(Kit, on_delete=models.CASCADE)
 
@@ -60,21 +68,22 @@ class ProductEntry(models.Model):
         return self.product.name + " " + str(self.date)
 
 #ESTE MODELO MANTIENE UN REGISTRO DE LAS ENTRADAS QUE HAY DE LOS KITS  
-class KitEntry(models.Model):
-    kit = models.ForeignKey(Kit, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    date = models.DateField()
+# class KitEntry(models.Model):
+#     kit = models.ForeignKey(Kit, on_delete=models.CASCADE)
+#     quantity = models.IntegerField()
+#     date = models.DateField()
 
-    def __str__(self):
-        return self.kit.name + " " + str(self.quantity) + " " + str(self.date)
+#     def __str__(self):
+#         return self.kit.name + " " + str(self.quantity) + " " + str(self.date)
     
 #ESTE MODELO MANTIENE UN REGISTRO DE LAS VENTAS QUE SE HACEN
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    product_quantity = models.IntegerField(default=0)
-    kit = models.ForeignKey(Kit, on_delete=models.CASCADE, null=True, blank=True)
-    kit_quantity = models.IntegerField(default=0)
+    title = models.CharField(max_length=100, null=True, blank=True)
+    # product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+    # product_quantity = models.IntegerField(default=0)
+    # kit = models.ForeignKey(Kit, on_delete=models.CASCADE, null=True, blank=True)
+    # kit_quantity = models.IntegerField(default=0)
 
     date = models.DateField()
     total = models.IntegerField(default=0)
@@ -82,7 +91,25 @@ class Order(models.Model):
 
 
     def __str__(self):
-        return  " " + str(self.kit.name) + " " + str(self.date)
+        return  " " + str(self.title) + " " + str(self.date)
+    
+class OrderProduct(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE) 
+    quantity = models.IntegerField()
+    comment = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        return self.product.name + " " + str(self.quantity)
+
+class OrderKit(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    kit = models.ForeignKey(Kit, on_delete=models.CASCADE) 
+    quantity = models.IntegerField()
+    comment = models.CharField(max_length=300, null=True, blank=True)
+
+    def __str__(self):
+        return self.kit.name + " " + str(self.quantity)
 
 #ESTE MODELO MANTIENE UN REGISTRO DE LAS CATEGORIAS DE LOS PRODUCTOS Y KITS
 class Category(models.Model):
