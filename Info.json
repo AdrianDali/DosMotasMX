@@ -1,0 +1,128 @@
+{
+    "category" : 
+    [
+        {
+            "name": "Moledores"
+        },
+        {
+            "name":"Blunts"
+        },
+        {
+            "name" : "Kits"
+        },
+        {
+            "name" : "Sabanas"
+        },
+        {
+            "name" : "Filtros"
+        },
+        {
+            "name" : "Enroladoras"
+        },
+        {
+            "name" : "Encendedores"
+        },
+        {
+            "name" : "Carteras"
+        }
+    ]
+}
+
+
+,
+
+
+{
+    "product" : 
+    [
+        {
+            "name": "King Palm paquete 5",
+            "price": "98",
+            "stock_product" : "3",
+            "desc" : "0",
+            "category": "Blunts",
+            "sell" : "200"
+        },
+        {
+            "name": "Cartera Sabanas y Filtros Gorilla Rolling",
+            "price": "18",
+            "stock_product" : "6",
+            "desc" : "0",
+            "category": "Cartera",
+            "sell" : "50"
+        },
+        {
+            "name": "Cartera Alien Puff 2 Filtros y Sabanas ",
+            "price": "35",
+            "stock_product" : "6",
+            "desc" : "0",
+            "category": "Cartera ",
+            "sell" : "80"
+        },
+        {
+            "name": "Charola con tapa ",
+            "price": "88",
+            "stock_product" : "3",
+            "desc" : "0",
+            "category": "Charolas ",
+            "sell" : "200"
+        },
+        {
+            "name": "Sabanas Celulosa",
+            "price": "16",
+            "stock_product" : "6",
+            "desc" : "0",
+            "category": "Sabanas",
+            "sell" : "35"
+        },
+        {
+            "name": "Molino Acrilico Lion Rolling Circus",
+            "price": "35",
+            "stock_product" : "12",
+            "desc" : "0",
+            "category": "Moledores",
+            "sell" : "70"
+        },
+        {
+            "name": "Moledor Pocket Multifuncional ",
+            "price": "145",
+            "stock_product" : "1",
+            "desc" : "0",
+            "category": "Moledores",
+            "sell" : "300"
+        },
+        {
+            "name": "Encendedor Clipper",
+            "price": "13",
+            "stock_product" : "24",
+            "desc" : "0",
+            "category": "Encendedores",
+            "sell" : "20"
+        },
+        {
+            "name": "Moledor Electrico",
+            "price": "80",
+            "stock_product" : "3",
+            "desc" : "0",
+            "category": "Moledor",
+            "sell" : "200"
+        },
+        {
+            "name": "Enroladora generica",
+            "price": "20",
+            "stock_product" : "6",
+            "desc" : "0",
+            "category": "Enroladora",
+            "sell" : "50"
+        },
+        {
+            "name": "Enroladora Gorilla",
+            "price": "40",
+            "stock_product" : "24",
+            "desc" : "0",
+            "category": "Encendedores",
+            "sell" : "85"
+        }
+
+    ]
+}

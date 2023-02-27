@@ -16,7 +16,7 @@ class User(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=50)
     price = models.IntegerField()
-    stock_product = models.ForeignKey('Stock', on_delete=models.CASCADE, default="")
+    stock_product = models.IntegerField()
     image = models.ImageField(upload_to='shop/images', default="", null=True, blank=True)
     desc = models.CharField(max_length=300)
     category = models.ForeignKey('Category', on_delete=models.CASCADE, default="")
@@ -39,11 +39,11 @@ class Kit(models.Model):
         return self.name
     
     
-class Stock(models.Model):
-    name_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
-    kit_select = models.ForeignKey(Kit, on_delete=models.CASCADE, null=True, blank=True)
-    stock = models.IntegerField()
-    comment = models.CharField(max_length=300, null=True, blank=True)
+# class Stock(models.Model):
+#     name_product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
+#     kit_select = models.ForeignKey(Kit, on_delete=models.CASCADE, null=True, blank=True)
+#     stock = models.IntegerField()
+#     comment = models.CharField(max_length=300, null=True, blank=True)
 
 
 #RELACION MUCHOS A MNUCHOS PARA CREAR EL KIT BASADO EN LOS PRODUCTOS 

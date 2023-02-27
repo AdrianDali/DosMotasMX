@@ -4,8 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from back.serializers import CategorySerializer
-from back.classes import Category
+from back.serializers import CategorySerializer, ProductSerializer
+from back.classes import Category, Product
 
 # Create your views here.
 class TestView(APIView):
@@ -16,31 +16,28 @@ class TestView(APIView):
 class ProductView(APIView):
     permission_classes = (AllowAny,)
     def post(self,request): 
+        for product in request.data.get('product'):
+            print(product)
 
+            serializer = ProductSerializer(data =product)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
+            product = Product(data.get("name"),data.get("price"),data.get("stock_product"),data.get("desc"),data.get("category"),data.get("sell"))
+            product.insert_db()
 
-        payload = request.data
 
         return Response({"message":"Hello World"},status=status.HTTP_200_OK)
     
 class CategoryView(APIView):
     permission_classes = (AllowAny,)
     def post(self,request): 
-        for key in request.data:
-            print(key)
-            #probar aqui que no hay problema con el request.data 
-            print(request.data.get(key))
-            print(request.data.get('category')[1])
-        serializer = CategorySerializer(data =request.data.get('category')[1])
-        serializer.is_valid(raise_exception=True)
-
-        data = serializer.validated_data
-        print("la data")
-        print(data.get("name"))
-
-        category = Category(data.get("name"))
-
-        category.insert_db()
         
+        for key in request.data.get('category'):
+            serializer = CategorySerializer(data =key)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
+            category = Category(data.get("name"))
+            category.insert_db()      
 
         return Response({"message":"Category created succes"},status=status.HTTP_200_OK)
     
