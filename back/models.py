@@ -10,7 +10,17 @@ class User(models.Model):
     password = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name + " " + self.email  
+        return self.name + " " + self.email 
+
+
+#ESTE MODELO MANTIENE UN REGISTRO DE LAS CATEGORIAS DE LOS PRODUCTOS Y KITS
+class Category(models.Model):
+    name = models.CharField(max_length=50)
+    image = models.ImageField(upload_to='shop/images', default="", null=True, blank=True)
+
+    def __str__(self):
+        return self.name
+
     
 #LOS PRODUCTOS QUE ESTARAN REGISTRADOS POR SEPARADO         
 class Product(models.Model):
@@ -19,7 +29,7 @@ class Product(models.Model):
     stock_product = models.IntegerField()
     image = models.ImageField(upload_to='shop/images', default="", null=True, blank=True)
     desc = models.CharField(max_length=300)
-    category = models.ForeignKey('Category', on_delete=models.CASCADE, default="")
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default="")
     sell_price = models.IntegerField(default=0)
 
     def __str__(self):
@@ -111,10 +121,4 @@ class OrderKit(models.Model):
     def __str__(self):
         return self.kit.name + " " + str(self.quantity)
 
-#ESTE MODELO MANTIENE UN REGISTRO DE LAS CATEGORIAS DE LOS PRODUCTOS Y KITS
-class Category(models.Model):
-    name = models.CharField(max_length=50)
-    image = models.ImageField(upload_to='shop/images', default="", null=True, blank=True)
 
-    def __str__(self):
-        return self.name
