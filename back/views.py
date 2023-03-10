@@ -73,4 +73,15 @@ class KitView(APIView):
         kit.insert_db()
         return Response({"message":"kit created succes"},status=status.HTTP_200_OK)
     
+class ProductEntryView(APIView):
+    permission_classes = (AllowAny,)
+    def post(self,request): 
+        for key in request.data.get('product'):
+            serializer = ProductSerializer(data =key)
+            serializer.is_valid(raise_exception=True)
+            data = serializer.validated_data
+            product = ProductModel.objects.get(name=data.get("name"))
+            product.stock_product = product.stock_product + data.get("stock_product")
+            product.save()
+        return Response({"message":"Productos dado de alta"},status=status.HTTP_200_OK)
     

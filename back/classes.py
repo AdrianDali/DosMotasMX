@@ -1,4 +1,4 @@
-from back.models import OrderProduct as OrderProductModel, Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
+from back.models import ProductKit as ProductkitModel, OrderKit as OrderKitModel ,OrderProduct as OrderProductModel, Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
 from rest_framework import status 
 from rest_framework.response import Response
 
@@ -98,8 +98,16 @@ class Order:
             print("se creo con exito")
 
 
-        if KitModel.objects.filter(name=self.kits_sold[0].get("name")).exists():
+        kits = KitModel.objects.filter(name=self.kits_sold[0].get("name"))
+        if kits.exists():
             print("Kit ya existe")
+            OrderKit = OrderKitModel.objects.create(
+                order = self.db_instance, 
+                kit = kits[0],
+                quantity = 1,
+                comment = "hola"
+            )
+
 
         
 class Kit:
@@ -110,6 +118,7 @@ class Kit:
         self.desc = data.get("desc")
         self.category = data.get("category")
         self.sell_price = data.get("sell_price")
+        self.products = data.get("products")
 
         self.db_instance: KitModel | None = None
 
@@ -126,11 +135,23 @@ class Kit:
                     desc=self.desc,
                     category=CategoryModel.objects.get(name=self.category),
                     sell_price=self.sell_price
-                )
+                )                    
+
             except Exception as e:
                 print(e)
                 raise Exception('Error inserting product in database')
 
-
+            try: 
+                productos = ProductModel.objects.filter(name=self.products[0].get("name"))
+                print(productos[0])
+                if productos.exists():
+                    pr = ProductkitModel.objects.create(
+                        kit=self.db_instance,
+                        product=productos[0],
+                    )
+                    print("Producto ya existe")
+            except Exception as e:
+                print(e)
+                raise Exception('Error inserting product in database')
         
     
