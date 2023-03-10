@@ -1,15 +1,12 @@
-from back.models import Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
+from back.models import OrderProduct as OrderProductModel, Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
 from rest_framework import status 
 from rest_framework.response import Response
 
 class Category: 
     def __init__(self,name): 
         self.name = name 
-
         self.db_instance: CategoryModel | None = None
-
     def insert_db(self):
-
         if not self.db_instance is None: 
             raise Exception('Category already in database')
         try:
@@ -20,7 +17,6 @@ class Category:
 
 class Product:
     def __init__(self, data ) -> None:
-
         self.name = data.get("name")
         self.price = int(data.get("price"))
         self.stock_product = int(data.get("stock_product"))
@@ -32,9 +28,6 @@ class Product:
 
 
     def insert_db(self):
-
-        
-
         if ProductModel.objects.filter(name=self.name).exists(): 
             print("Producto ya existe")
             pass
@@ -59,10 +52,19 @@ class Order:
         self.date = data.get("date")
         self.total = data.get("total")
         self.sold = data.get("sold")
+        self.products_sold = data.get("products")
+        self.kits_sold = data.get("kits")
+        print("###########################sadasd")
+        print(self.kits_sold)
+        print(self.products_sold)
+
 
         self.db_instance: ProductModel | None = None
 
     def insert_db(self):
+        print("product sold")
+        print(self.products_sold[0].get("name"))
+
         if OrderModel.objects.filter(title=self.title).exists(): 
             print("Producto ya existe")
             pass
@@ -79,6 +81,27 @@ class Order:
                 print(e)
                 raise Exception('Error inserting product in database')
             
+
+
+        productos = ProductModel.objects.filter(name=self.products_sold[0].get("name"))
+        print(type(productos[0]))
+        if productos.exists():
+
+
+
+            print("Producto ya exsssssssssssssssssssssssiste")
+            OrderProduct = OrderProductModel.objects.create(
+                order=self.db_instance,
+                product=productos[0],
+                quantity=1,
+                comment="hola")
+            print("se creo con exito")
+
+
+        if KitModel.objects.filter(name=self.kits_sold[0].get("name")).exists():
+            print("Kit ya existe")
+
+        
 class Kit:
     def __init__(self,data) -> None:
         self.name = data.get("name")

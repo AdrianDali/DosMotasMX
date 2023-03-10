@@ -12,13 +12,6 @@ class ProductSerializer(serializers.Serializer):
     category = serializers.CharField(max_length=50)
     sell_price = serializers.IntegerField(default=333)
 
-class OrderSerializer(serializers.Serializer):
-    user_name = serializers.CharField(max_length=100)
-    title = serializers.CharField(max_length=100)
-    date = serializers.DateField()
-    total = serializers.IntegerField()
-    sold = serializers.BooleanField()
-    
 class KitSerializer(serializers.Serializer): 
     name = serializers.CharField(max_length=150)
     price = serializers.IntegerField()
@@ -26,4 +19,25 @@ class KitSerializer(serializers.Serializer):
     desc = serializers.IntegerField()
     category = serializers.CharField()
     sell_price = serializers.IntegerField()
+
+class ProductsSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=50)
+    quantity_of_products = serializers.IntegerField()
+
+class KitsSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=150)
+    quantity_of_kits = serializers.IntegerField()
+
+
+class OrderSerializer(serializers.Serializer):
+    user_name = serializers.CharField(max_length=100)
+    title = serializers.CharField(max_length=100)
+    date = serializers.DateField()
+    total = serializers.IntegerField()
+    sold = serializers.BooleanField()
+    products = ProductsSerializer(many=True)
+    kits = KitsSerializer(many=True)
+
+    
+
     

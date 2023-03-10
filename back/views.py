@@ -39,6 +39,7 @@ class OrderView(APIView):
         print("######################DATA ORDER######################")
         print(data)
         order = Order(data)
+        
         order.insert_db()
         print("######################DATA ORDER######################")
         print(order)
@@ -70,9 +71,6 @@ class KitView(APIView):
         print(data)
         kit = Kit(data)
         kit.insert_db()
-        
-
-        
         return Response({"message":"kit created succes"},status=status.HTTP_200_OK)
     
     
