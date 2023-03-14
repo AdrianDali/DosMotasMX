@@ -42,6 +42,16 @@ class OrderSerializer(serializers.Serializer):
     products = ProductsSerializer(many=True)
     kits = KitsSerializer(many=True)
 
+class ProductEntrySerializer(serializers.Serializer):
+    title = serializers.CharField(max_length=100)
+    date = serializers.DateField()
+    user_name_buyer = serializers.CharField(max_length=100)
+    description = serializers.CharField(max_length=100)
+    total_amount = serializers.IntegerField()
+    products = ProductsSerializer(many=True)
+
+
+
     
 
     

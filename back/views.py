@@ -4,8 +4,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from back.serializers import CategorySerializer, ProductSerializer, OrderSerializer, KitSerializer
-from back.classes import Category, Product, Order, Kit
+from back.serializers import CategorySerializer, ProductSerializer, OrderSerializer, KitSerializer,ProductEntrySerializer
+from back.classes import Category, Product, Order, Kit, Entry
 from back.models import Product as ProductModel, Category as CategoryModel
 
 # Create your views here.
@@ -20,11 +20,8 @@ class ProductView(APIView):
         for key in request.data.get('product'):
             serializer = ProductSerializer(data =key)
             serializer.is_valid(raise_exception=True)
-            
             data = serializer.validated_data
-            
             print(data)
-
             product = Product( data= data  ) 
             product.insert_db()
         return Response({"message":"Productos dado de alta"},status=status.HTTP_200_OK)
@@ -76,12 +73,19 @@ class KitView(APIView):
 class ProductEntryView(APIView):
     permission_classes = (AllowAny,)
     def post(self,request): 
-        for key in request.data.get('product'):
-            serializer = ProductSerializer(data =key)
-            serializer.is_valid(raise_exception=True)
-            data = serializer.validated_data
-            product = ProductModel.objects.get(name=data.get("name"))
-            product.stock_product = product.stock_product + data.get("stock_product")
-            product.save()
+        serializer = ProductEntrySerializer(data =request.data.get('entry'))
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        print("######################DATA ENTRY######################")
+        print(data)
+        print(data.get("products")[0].get("name"))
+        entry = Entry(data)
+        print(entry.title)
+        print(entry.total_amount)
+        print(entry.date)
+        print(entry.products)
+
+        entry.insert_db()
+
         return Response({"message":"Productos dado de alta"},status=status.HTTP_200_OK)
     

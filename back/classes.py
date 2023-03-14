@@ -1,4 +1,4 @@
-from back.models import ProductKit as ProductkitModel, OrderKit as OrderKitModel ,OrderProduct as OrderProductModel, Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
+from back.models import ProductEntry as ProductEntryModel ,Entry as EntryModel ,ProductKit as ProductkitModel, OrderKit as OrderKitModel ,OrderProduct as OrderProductModel, Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
 from rest_framework import status 
 from rest_framework.response import Response
 
@@ -153,5 +153,55 @@ class Kit:
             except Exception as e:
                 print(e)
                 raise Exception('Error inserting product in database')
+   
+
+class Entry:
+    def __init__(self, data) -> None:
+        self.title = data.get("title")
+        self.date = data.get("date")
+        self.user_name_buyer = UserModel.objects.get(name =data.get("user_name_buyer"))
+        self.description = data.get("description")
+        self.total_amount = data.get("total_amount")
+        self.products = ProductModel.objects.get(name=data.get("products")[0].get("name"))
+
+        self.db_instance: ProductEntryModel | None = None
+
+    def insert_db(self):
+
+        if EntryModel.objects.filter(title=self.title).exists():
+            print("Entry ya existe")
+            pass
+            self.db_instance = EntryModel.objects.get(title=self.title)
+        else:
+            try:
+                self.db_instance = EntryModel.objects.create(
+                    title=self.title,
+                    date=self.date,
+                    buyer = self.user_name_buyer,
+                    description=self.description,
+                    total_amount=self.total_amount
+                )
+
+            except Exception as e:
+                print(e)
+                raise Exception('Error inserting Entry in database')
         
+        productos = ProductModel.objects.filter(name=self.products.name)
+        if productos.exists():
+            try:
+                print("Producto ya existe")
+                print(productos[0])
+                print(self.db_instance)
+                EntryProduct = ProductEntryModel.objects.create(
+                    product=productos[0],
+                    entry=self.db_instance,
+                    quantity_product=1,
+                    price_by_product=12)
+                print("se creo con exito")
+            except Exception as e:
+                print(e)
+                raise Exception('Error inserting product in database')  
+            
+
+
     
