@@ -62,7 +62,7 @@ class ProductKit(models.Model):
     kit = models.ForeignKey(Kit, on_delete=models.CASCADE)
 
     def __str__(self):
-        return self.product.name + " " 
+        return "EL kit:"+self.kit.name + "  Los productos: " + self.product.name + " "  
     
 
 class Entry(models.Model):

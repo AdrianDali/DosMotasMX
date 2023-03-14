@@ -23,7 +23,7 @@ class KitSerializer(serializers.Serializer):
     desc = serializers.IntegerField()
     category = serializers.CharField()
     sell_price = serializers.IntegerField()
-    products = KitProductSerializer(many=True)
+    products = KitProductSerializer(many=True, allow_null=True, required=False, default=None)
 
 class ProductsSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=50)
@@ -49,6 +49,11 @@ class ProductEntrySerializer(serializers.Serializer):
     description = serializers.CharField(max_length=100)
     total_amount = serializers.IntegerField()
     products = ProductsSerializer(many=True)
+
+
+class GetKitProductSerializer(serializers.Serializer):
+    kit = KitSerializer()
+    products = ProductSerializer(many=True)
 
 
 

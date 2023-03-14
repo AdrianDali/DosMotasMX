@@ -4,10 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
-from back.serializers import CategorySerializer, ProductSerializer, OrderSerializer, KitSerializer,ProductEntrySerializer
+from back.serializers import CategorySerializer, ProductSerializer, OrderSerializer, KitSerializer,ProductEntrySerializer,GetKitProductSerializer
 from back.classes import Category, Product, Order, Kit, Entry
-from back.models import Product as ProductModel, Category as CategoryModel
-
+from back.models import Product as ProductModel, Category as CategoryModel, Order as OrderModel, Kit as KitModel, ProductEntry as ProductEntryModel, ProductKit as ProductKitModel
+import json
 # Create your views here.
 class TestView(APIView):
     permission_classes = (AllowAny,)
@@ -89,3 +89,45 @@ class ProductEntryView(APIView):
 
         return Response({"message":"Productos dado de alta"},status=status.HTTP_200_OK)
     
+class GetProductView(APIView):
+    permission_classes = (AllowAny,)
+    def get(self,request): 
+        products = ProductModel.objects.all()
+        serializer_product = ProductSerializer(products,many=True)
+        datos = serializer_product.data
+        print(datos)
+
+        return Response({"products":datos},status=status.HTTP_200_OK)
+    
+class GetCategoryView(APIView):
+    permission_classes = (AllowAny,)
+    def get(self,request): 
+        categories = CategoryModel.objects.all()
+        serializer_category = CategorySerializer(categories,many=True)
+        datos = serializer_category.data
+        print(datos)
+
+        return Response({"categories":datos},status=status.HTTP_200_OK)
+    
+class GetKitView(APIView):
+    permission_classes = (AllowAny,)
+    def get(self,request):
+        kit = ProductKitModel.objects.all().select_related('kit').select_related('product')
+        print("#######################")
+        print(kit)
+        serializer_kit = GetKitProductSerializer(kit,many=True)
+        datos = serializer_kit.data
+        print(datos)
+
+        return Response({kit},status=status.HTTP_200_OK)
+
+
+class GetOrderView(APIView):
+    permission_classes = (AllowAny,)
+    def get(self,request): 
+        orders = OrderModel.objects.all()
+        serializer_order = OrderSerializer(orders,many=True)
+        datos = serializer_order.data
+        print(datos)
+
+        return Response({"orders":datos},status=status.HTTP_200_OK)
