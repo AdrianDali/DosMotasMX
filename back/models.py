@@ -64,18 +64,31 @@ class ProductKit(models.Model):
     def __str__(self):
         return self.product.name + " " 
     
+
+class Entry(models.Model):
+    title = models.CharField(max_length=100, null=True, blank=True)
+    date = models.DateField()
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    description = models.CharField(max_length=300, null=True, blank=True)
+    total_amount = models.IntegerField(default=0)
+    
+    def __str__(self):
+        return str(self.title) + " " + str(self.date)
+
+    
 #ESTE MODELO MANTIENE UN REGISTRO DE LAS ENTRADAS QUE HAY DE PRODUCTOS 
 class ProductEntry(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    entry = models.ForeignKey(Entry, on_delete=models.CASCADE)
     quantity_product = models.IntegerField()
-    date = models.DateField()
-    description = models.CharField(max_length=300, null=True, blank=True)
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    price_by_product = models.IntegerField()
+    
 
 
     def __str__(self):
-        return self.product.name + " " + str(self.date)
+        return str(self.product.name )
+    
+
 
 #ESTE MODELO MANTIENE UN REGISTRO DE LAS ENTRADAS QUE HAY DE LOS KITS  
 # class KitEntry(models.Model):
