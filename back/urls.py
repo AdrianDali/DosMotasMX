@@ -1,5 +1,5 @@
 from django.urls import path, include
-from back.views import TestView, ProductView, CategoryView, OrderView, KitView, ProductEntryView, GetProductView, GetCategoryView, GetOrderView, GetKitView
+from back.views import TestView, ProductView, CategoryView, OrderView, KitView, ProductEntryView, GetProductView, GetCategoryView, GetOrderView, GetKitView, LoginView
 
 app_name = 'back'
 
@@ -12,6 +12,7 @@ urlpatterns = [
     path('productEntry/' ,ProductEntryView.as_view(), name='productEntry'),
     path('getProducts/',GetProductView.as_view(), name='getProducts'),
     path('getCategories/',GetCategoryView.as_view(), name='getCategories'),
+    path('login/',LoginView.as_view(), name='login'),
     #Aun no funcionan 
     path('getOrders/',GetOrderView.as_view(), name='getOrders'),
     path('getKits/',GetKitView.as_view(), name='getKits'),

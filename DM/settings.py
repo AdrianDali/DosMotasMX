@@ -76,8 +76,12 @@ WSGI_APPLICATION = 'DM.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'inventario',
+        'USER':  'postgres',
+        'PASSWORD':'123456',
+        'HOST' :'127.0.0.1' ,
+        'PORT': '5432',
     }
 }
 
@@ -100,6 +104,25 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer', # deshabilita la interfaz navegable
+)
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer', # Activar para entornos de prueba
+    )
+
+REST_FRAMEWORK = {
+        'DATETIME_FORMAT': "%Y-%m-%d %H:%M",
+        'DEFAULT_AUTHENTICATION_CLASSES': [
+            'rest_framework.authentication.TokenAuthentication',
+            # 'rest_framework.authentication.SessionAuthentication'
+        ],
+        'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+        'DEFAULT_PERMISSION_CLASSES': ( 'rest_framework.permissions.IsAdminUser', ),
+        'DEFAULT_RENDERER_CLASSES': DEFAULT_RENDERER_CLASSES,
+        'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

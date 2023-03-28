@@ -8,6 +8,8 @@ from back.serializers import CategorySerializer, ProductSerializer, OrderSeriali
 from back.classes import Category, Product, Order, Kit, Entry
 from back.models import Product as ProductModel, Category as CategoryModel, Order as OrderModel, Kit as KitModel, ProductEntry as ProductEntryModel, ProductKit as ProductKitModel
 import json
+from django.contrib.auth.models import User
+
 # Create your views here.
 class TestView(APIView):
     permission_classes = (AllowAny,)
@@ -131,3 +133,16 @@ class GetOrderView(APIView):
         print(datos)
 
         return Response({"orders":datos},status=status.HTTP_200_OK)
+    
+class LoginView(APIView):
+    permission_classes = (AllowAny,)
+    def post(self,request): 
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = User.objects.filter(username=username,password=password)
+        print(user)
+        if user is None:
+            return Response({"message":"Login failed"},status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"Login succes"},status=status.HTTP_200_OK)
