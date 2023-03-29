@@ -9,6 +9,9 @@ from back.classes import Category, Product, Order, Kit, Entry
 from back.models import Product as ProductModel, Category as CategoryModel, Order as OrderModel, Kit as KitModel, ProductEntry as ProductEntryModel, ProductKit as ProductKitModel
 import json
 from django.contrib.auth.models import User
+from rest_framework.authtoken.models import Token
+from django.contrib.auth import authenticate, login as auth_login, logout
+
 
 # Create your views here.
 class TestView(APIView):
@@ -137,12 +140,26 @@ class GetOrderView(APIView):
 class LoginView(APIView):
     permission_classes = (AllowAny,)
     def post(self,request): 
+
         username = request.data.get('username')
         password = request.data.get('password')
+        email = request.data.get('email')
 
-        user = User.objects.filter(username=username,password=password)
-        print(user)
-        if user is None:
-            return Response({"message":"Login failed"},status=status.HTTP_200_OK)
-        else:
+        username =authenticate(username=username,password=password)
+
+        if username is not None:
+            auth_login(request,username)
+            router = Token.objects.update_or_create(
+                user = username
+            )
+            print("TOKEN")
+
             return Response({"message":"Login succes"},status=status.HTTP_200_OK)
+        else:
+            return Response({"message":"Login failed"},status=status.HTTP_200_OK)
+
+class LogoutOperator(APIView):
+    authentication_classes = (AllowAny,)
+
+    def post(self,request):
+        pass
