@@ -197,4 +197,38 @@ class FilterProductView(APIView):
             aux.append(a)
             
         return Response({"product": aux},status=status.HTTP_200_OK)
+    
+class DeleteCategory(APIView):
+    permission_classes = (AllowAny,)
+    def delete(self,request):
 
+        data = request.data.get("category")
+        category =CategoryModel.objects.get(name = data) 
+        category.delete()
+        return Response({"category" : "categoria borrada"}, status= status.HTTP_200_OK)
+
+
+class DeleteProduct(APIView):
+    permission_classes = (AllowAny,)
+    def delete(self,request):
+        data = request.data.get("product")
+        product = ProductModel.objects.get(name = data)
+        product.delete()
+        return Response({"product": "producto borrado"}, status= status.HTTP_200_OK)
+    
+class DeleteKit(APIView):
+    permission_classes = (AllowAny,)
+    def delete(self, request): 
+        data = request.data.get("kit")
+        kit = KitModel.objects.get(name = data)
+        kit.delete()
+        return Response({"kit": "kit borrador"}, status=status.HTTP_201_CREATED)
+
+class DeleteOrder(APIView):
+    permission_classes = (AllowAny,)
+    def delete(self,request):
+        data = request.data.get("order")
+        order = OrderModel.objects.get(name = data)
+        order.delete()
+        return Response({"order": "orden borrada"}, status= status.HTTP_200_OK)
+    
