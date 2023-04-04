@@ -1,5 +1,5 @@
 from django.urls import path, include
-from back.views import TestView, ProductView, CategoryView, OrderView, KitView, ProductEntryView, GetProductView, GetCategoryView, GetOrderView, GetKitView, LoginView
+from back.views import TestView, ProductView, CategoryView, OrderView, KitView, ProductEntryView, GetProductView, GetCategoryView, GetOrderView, GetKitView, LoginView, FilterProductView
 
 app_name = 'back'
 
@@ -13,8 +13,11 @@ urlpatterns = [
     path('getProducts/',GetProductView.as_view(), name='getProducts'),
     path('getCategories/',GetCategoryView.as_view(), name='getCategories'),
     path('login/',LoginView.as_view(), name='login'),
+    path('getKits/',GetKitView.as_view(), name='getKits'),
+    path('filterProducts/',FilterProductView.as_view(), name='filterProducts'),
+
     #Aun no funcionan 
     path('getOrders/',GetOrderView.as_view(), name='getOrders'),
-    path('getKits/',GetKitView.as_view(), name='getKits'),
+    
 
     ]

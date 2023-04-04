@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from back.serializers import CategorySerializer, ProductSerializer, OrderSerializer, KitSerializer,ProductEntrySerializer,GetKitProductSerializer
 from back.classes import Category, Product, Order, Kit, Entry
-from back.models import Product as ProductModel, Category as CategoryModel, Order as OrderModel, Kit as KitModel, ProductEntry as ProductEntryModel, ProductKit as ProductKitModel
+from back.models import Product as ProductModel, Category as CategoryModel, Order as OrderModel, Kit as KitModel, ProductEntry as ProductEntryModel, ProductKit as ProductKitModel ,OrderProduct as OrderProductModel, OrderKit as OrderKitModel, Entry as EntryModel
 import json
 from django.contrib.auth.models import User
 from rest_framework.authtoken.models import Token
@@ -117,25 +117,48 @@ class GetCategoryView(APIView):
 class GetKitView(APIView):
     permission_classes = (AllowAny,)
     def get(self,request):
-        kit = ProductKitModel.objects.all().select_related('kit').select_related('product')
-        print("#######################")
-        print(kit)
-        serializer_kit = GetKitProductSerializer(kit,many=True)
-        datos = serializer_kit.data
-        print(datos)
+        aux = []
+        kits = KitModel.objects.all()
 
-        return Response({kit},status=status.HTTP_200_OK)
+        kits_products = ProductKitModel.objects.filter(kit = KitModel.objects.get( name = kits[0].name)).select_related('product').values("product__name","product__price")        
+
+
+
+
+        print(kits_products)    
+
+        for i in kits:
+            print("#################################")
+            print(i)
+            print("s#################################")
+
+
+            a = {}
+            a.update({"name":i.name})
+            a.update({"price":i.price})
+            a.update({"products":kits_products})
+            aux.append(a)
+            
+
+        return Response({"kits": aux},status=status.HTTP_200_OK)
 
 
 class GetOrderView(APIView):
     permission_classes = (AllowAny,)
     def get(self,request): 
-        orders = OrderModel.objects.all()
-        serializer_order = OrderSerializer(orders,many=True)
-        datos = serializer_order.data
-        print(datos)
+        aux = []
+        orders = OrderModel.objects.all().values("user__username", "title","date" , "total", "sold")
+        order_product = OrderProductModel.objects.filter(order = OrderModel.objects.get( title = orders[0].get("title"))).select_related('product').values("product__name","product__price")
+        order_kit = OrderKitModel.objects.filter(order  = OrderModel.objects.get( title = orders[0].get("title"))).select_related('kit').values("kit__name","kit__price")
 
-        return Response({"orders":datos},status=status.HTTP_200_OK)
+        for i in orders:
+            a = {}
+            a.update(i)
+            a.update({"products":order_product})
+            a.update({"kits":order_kit})
+            aux.append(a)
+        
+        return Response({"orders":aux},status=status.HTTP_200_OK)
     
 class LoginView(APIView):
     permission_classes = (AllowAny,)
@@ -144,16 +167,13 @@ class LoginView(APIView):
         username = request.data.get('username')
         password = request.data.get('password')
         email = request.data.get('email')
-
         username =authenticate(username=username,password=password)
-
         if username is not None:
             auth_login(request,username)
             router = Token.objects.update_or_create(
                 user = username
             )
             print("TOKEN")
-
             return Response({"message":"Login succes"},status=status.HTTP_200_OK)
         else:
             return Response({"message":"Login failed"},status=status.HTTP_200_OK)
@@ -163,3 +183,18 @@ class LogoutOperator(APIView):
 
     def post(self,request):
         pass
+
+
+class FilterProductView(APIView):
+    permission_classes = (AllowAny,)
+    def post(self,request): 
+        aux = []
+        products = ProductModel.objects.filter(name = request.data.get("product")).values("name","price","category__name")
+        print(products)
+        for i in products:
+            a = {}
+            a.update(i)
+            aux.append(a)
+            
+        return Response({"product": aux},status=status.HTTP_200_OK)
+

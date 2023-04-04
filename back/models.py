@@ -1,6 +1,6 @@
 from django.db import models
 from django import forms
-
+from django.contrib.auth.models import User as AdminUser
 
 # Create your models here.
 #LOS USUARIOS QUE ESTARAN REGISTRADOS PARA HACER VENTAS 
@@ -68,7 +68,7 @@ class ProductKit(models.Model):
 class Entry(models.Model):
     title = models.CharField(max_length=100, null=True, blank=True)
     date = models.DateField()
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    buyer = models.ForeignKey(AdminUser, on_delete=models.CASCADE, null=True, blank=True)
     description = models.CharField(max_length=300, null=True, blank=True)
     total_amount = models.IntegerField(default=0)
     
@@ -101,13 +101,13 @@ class ProductEntry(models.Model):
     
 #ESTE MODELO MANTIENE UN REGISTRO DE LAS VENTAS QUE SE HACEN
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(AdminUser, on_delete=models.CASCADE)
     title = models.CharField(max_length=100, null=True, blank=True)
     # product = models.ForeignKey(Product, on_delete=models.CASCADE, null=True, blank=True)
     # product_quantity = models.IntegerField(default=0)
     # kit = models.ForeignKey(Kit, on_delete=models.CASCADE, null=True, blank=True)
     # kit_quantity = models.IntegerField(default=0)
-
+    
     date = models.DateField()
     total = models.IntegerField(default=0)
     sold = models.BooleanField(default=False)
@@ -123,7 +123,7 @@ class OrderProduct(models.Model):
     comment = models.CharField(max_length=300, null=True, blank=True)
 
     def __str__(self):
-        return self.product.name + " " + str(self.quantity)
+        return  self.product.name + " " + str(self.quantity) 
 
 class OrderKit(models.Model):
     order = models.ForeignKey(Order, on_delete=models.CASCADE)

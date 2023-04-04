@@ -1,6 +1,7 @@
 from back.models import ProductEntry as ProductEntryModel ,Entry as EntryModel ,ProductKit as ProductkitModel, OrderKit as OrderKitModel ,OrderProduct as OrderProductModel, Product as ProductModel, Category as CategoryModel, Order as OrderModel, User as UserModel, Kit as KitModel
 from rest_framework import status 
 from rest_framework.response import Response
+from django.contrib.auth.models import User as AdminUser
 
 class Category: 
     def __init__(self,name): 
@@ -64,6 +65,11 @@ class Order:
     def insert_db(self):
         print("product sold")
         print(self.products_sold[0].get("name"))
+        print("#################################USUEWAURI#############################")
+        user  = AdminUser.objects.get(username = self.user_name)
+        print("user#################################")
+        print(user)
+
 
         if OrderModel.objects.filter(title=self.title).exists(): 
             print("Producto ya existe")
@@ -71,7 +77,7 @@ class Order:
         else:
             try:
                 self.db_instance = OrderModel.objects.create(
-                    user= UserModel.objects.get(name=self.user_name),
+                    user= user,
                     title=self.title,
                     date=self.date,
                     total=self.total,
@@ -159,7 +165,7 @@ class Entry:
     def __init__(self, data) -> None:
         self.title = data.get("title")
         self.date = data.get("date")
-        self.user_name_buyer = UserModel.objects.get(name =data.get("user_name_buyer"))
+        self.user_name_buyer = AdminUser.objects.get(username =data.get("user_name_buyer"))
         self.description = data.get("description")
         self.total_amount = data.get("total_amount")
         self.products = ProductModel.objects.get(name=data.get("products")[0].get("name"))
