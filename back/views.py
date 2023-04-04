@@ -232,3 +232,45 @@ class DeleteOrder(APIView):
         order.delete()
         return Response({"order": "orden borrada"}, status= status.HTTP_200_OK)
     
+class EditCategory(APIView):
+    permission_classes = (AllowAny,)
+    def put(self,request):
+        #data = request.data.get("category")
+        category = CategoryModel.objects.get(name = request.data.get("name"))
+        category.name = request.data.get("new_name")
+        category.save()
+        return Response({"category": "categoria editada"}, status= status.HTTP_200_OK)
+
+class EditProduct(APIView):
+    permission_classes = (AllowAny,)
+    def put(self,request):
+        data = request.data.get("product")
+        product = ProductModel.objects.get(name = data.get("name"))
+        product.name = data.get("new_name")
+        product.price = data.get("new_price")
+        product.desc = data.get("new_desc")
+        product.category = CategoryModel.objects.get(name = data.get("new_category"))
+        product.sell_price = data.get("new_sell_price")
+        
+        product.save()
+        return Response({"product": "producto editado"}, status= status.HTTP_200_OK)
+    
+class EditKit(APIView):
+    permission_classes = (AllowAny,)
+    def put(self,request):
+        data = request.data.get("kit")
+        kit = KitModel.objects.get(name = data.get("name"))
+        kit.name = data.get("new_name")
+        kit.price = data.get("new_price")
+        kit.save()
+        return Response({"kit": "kit editado"}, status= status.HTTP_200_OK)
+
+class EditOrder(APIView):
+    permission_classes = (AllowAny,)
+    def put(self,request):
+        data = request.data.get("order")
+        order = OrderModel.objects.get(name = data.get("name"))
+        order.name = data.get("new_name")
+        order.save()
+        return Response({"order": "orden editada"}, status= status.HTTP_200_OK)
+
